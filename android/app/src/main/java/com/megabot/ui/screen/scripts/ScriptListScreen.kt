@@ -19,6 +19,18 @@ fun ScriptListScreen(viewModel: ScriptViewModel = hiltViewModel()) {
     val scripts by viewModel.scripts.collectAsState(initial = emptyList())
     var showEditor by remember { mutableStateOf(false) }
     var editingScript by remember { mutableStateOf<ScriptEntity?>(null) }
+    var testResult by remember { mutableStateOf<String?>(null) }
+
+    testResult?.let { result ->
+        AlertDialog(
+            onDismissRequest = { testResult = null },
+            title = { Text("테스트 결과 (msg: \"ping\")") },
+            text = { Text(result) },
+            confirmButton = {
+                TextButton(onClick = { testResult = null }) { Text("확인") }
+            }
+        )
+    }
 
     if (showEditor) {
         ScriptEditorDialog(
@@ -58,7 +70,8 @@ fun ScriptListScreen(viewModel: ScriptViewModel = hiltViewModel()) {
                             script = script,
                             onToggle = { viewModel.toggleScript(script.id, it) },
                             onEdit = { editingScript = script; showEditor = true },
-                            onDelete = { viewModel.deleteScript(script.id) }
+                            onDelete = { viewModel.deleteScript(script.id) },
+                            onTest = { viewModel.testScript(script) { testResult = it } }
                         )
                     }
                 }
@@ -73,7 +86,8 @@ fun ScriptCard(
     script: ScriptEntity,
     onToggle: (Boolean) -> Unit,
     onEdit: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onTest: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -100,7 +114,10 @@ fun ScriptCard(
                     )
                 }
             }
-            Switch(checked = script.enabled, onCheckedChange = onToggle)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                TextButton(onClick = onTest) { Text("Test") }
+                Switch(checked = script.enabled, onCheckedChange = onToggle)
+            }
         }
     }
 }

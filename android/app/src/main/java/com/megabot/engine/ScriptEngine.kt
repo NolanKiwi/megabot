@@ -81,6 +81,44 @@ class ScriptEngine(private val appContext: Context) {
         fn.call(ctx, sc, sc, args)
     }
 
+    /**
+     * Test execution: captures reply via callback instead of sending to NotificationListener.
+     */
+    fun executeResponseTest(
+        room: String,
+        msg: String,
+        sender: String,
+        isGroupChat: Boolean,
+        packageName: String,
+        onReply: (String) -> Unit
+    ) {
+        val ctx = rhinoContext ?: throw IllegalStateException("Script not compiled")
+        val sc = scope ?: throw IllegalStateException("Script not compiled")
+        val fn = responseFunction ?: return
+
+        val testReplier = TestReplier(onReply)
+
+        val args = arrayOf<Any?>(
+            room, msg, sender, isGroupChat, testReplier,
+            RhinoContext.getUndefinedValue(), packageName
+        )
+
+        fn.call(ctx, sc, sc, args)
+    }
+
+    /** Replier used in test mode — captures reply text via callback */
+    class TestReplier(private val onReply: (String) -> Unit) {
+        fun reply(message: String): Boolean {
+            onReply(message)
+            return true
+        }
+        @Suppress("UNUSED_PARAMETER")
+        fun reply(room: String, message: String): Boolean {
+            onReply(message)
+            return true
+        }
+    }
+
     private fun injectApis(ctx: RhinoContext, scope: ScriptableObject) {
         fun put(name: String, obj: Any) {
             ScriptableObject.putProperty(scope, name, RhinoContext.javaToJS(obj, scope))

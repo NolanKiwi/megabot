@@ -107,6 +107,35 @@ class ScriptEngineManager(
         }
     }
 
+    /**
+     * Simulate a test message against a specific script.
+     * Always compiles a fresh engine so the test works even if Bot Service is off.
+     * Calls onReply with the script's reply text, or "" if no reply.
+     */
+    fun simulateMessage(
+        entity: ScriptEntity,
+        msg: String = "ping",
+        room: String = "테스트방",
+        sender: String = "테스터",
+        packageName: String = "com.kakao.talk",
+        onReply: (String) -> Unit
+    ) {
+        scope.launch {
+            try {
+                val engine = ScriptEngine(context)
+                engine.compile(entity.code, entity.name)
+                var replied = false
+                engine.executeResponseTest(room, msg, sender, false, packageName) { reply ->
+                    replied = true
+                    onReply(reply)
+                }
+                if (!replied) onReply("")
+            } catch (e: Exception) {
+                onReply("오류: ${e.message}")
+            }
+        }
+    }
+
     fun destroy() {
         scope.cancel()
         compiledScripts.clear()

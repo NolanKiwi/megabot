@@ -6,6 +6,7 @@ import com.megabot.data.local.db.dao.ScriptDao
 import com.megabot.data.local.db.entity.ScriptEntity
 import com.megabot.engine.ScriptEngineManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -54,6 +55,20 @@ class ScriptViewModel @Inject constructor(
         viewModelScope.launch {
             val entity = scriptDao.getScriptById(id) ?: return@launch
             scriptDao.deleteScript(entity)
+        }
+    }
+
+    /** Send "ping" to the script and return reply via onResult (on Main thread) */
+    fun testScript(entity: ScriptEntity, onResult: (String) -> Unit) {
+        val manager = ScriptEngineManager.instance
+        if (manager == null) {
+            onResult("Bot Service가 꺼져 있습니다. Home에서 Bot Service를 켜주세요.")
+            return
+        }
+        manager.simulateMessage(entity) { reply ->
+            viewModelScope.launch(Dispatchers.Main) {
+                onResult(if (reply.isEmpty()) "(응답 없음)" else reply)
+            }
         }
     }
 }
