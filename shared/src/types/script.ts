@@ -13,21 +13,6 @@ export interface BotScript {
   updatedAt: string;
 }
 
-export interface ScriptCreateInput {
-  name: string;
-  code: string;
-  targetPackages: string[];
-  deviceId?: string;
-}
-
-export interface ScriptUpdateInput {
-  name?: string;
-  code?: string;
-  enabled?: boolean;
-  targetPackages?: string[];
-  deviceId?: string;
-}
-
 export interface ScriptCompileResult {
   scriptId: string;
   success: boolean;
