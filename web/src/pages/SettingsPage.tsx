@@ -79,7 +79,7 @@ export default function SettingsPage() {
       <section className="bg-slate-800 border border-slate-700 rounded-xl p-5">
         <h2 className="text-lg font-semibold text-white mb-4">API Access</h2>
         <p className="text-sm text-slate-400 mb-3">
-          Use the REST API to integrate MegaBot with external services.
+          Use the REST API to integrate _nolanbot with external services.
         </p>
         <div className="bg-slate-900 rounded-lg p-3 font-mono text-sm">
           <div className="flex items-center justify-between">

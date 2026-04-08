@@ -16,7 +16,7 @@ export default function Sidebar() {
   return (
     <aside className="w-64 bg-slate-800 border-r border-slate-700 flex flex-col min-h-screen">
       <div className="p-6 border-b border-slate-700">
-        <h1 className="text-xl font-bold text-white">MegaBot</h1>
+        <h1 className="text-xl font-bold text-white">_nolanbot</h1>
         <p className="text-sm text-slate-400 mt-1">Bot Dashboard</p>
       </div>
 
