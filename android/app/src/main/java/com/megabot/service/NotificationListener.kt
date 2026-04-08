@@ -25,7 +25,13 @@ class NotificationListener : NotificationListenerService() {
             "jp.naver.line.android",
             "com.facebook.orca",
             "org.telegram.messenger",
-            "com.instagram.android"
+            "org.telegram.messenger.web",
+            "org.telegram.plus",
+            "org.thunderdog.challegram",
+            "com.nekogram",
+            "com.exteragram.messenger",
+            "com.instagram.android",
+            "com.whatsapp",
         )
 
         // Cached reply actions per room, keyed by "packageName:roomName"
@@ -53,6 +59,8 @@ class NotificationListener : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
+        // 디버그: 모든 알림 패키지명 로그 (어떤 앱에서 오는지 확인용)
+        Log.d(TAG, "Notification from: ${sbn.packageName}")
         if (sbn.packageName !in SUPPORTED_PACKAGES) return
 
         try {
