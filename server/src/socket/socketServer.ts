@@ -122,13 +122,14 @@ function handleWebConnection(io: Server, socket: AuthenticatedSocket) {
   const userId = socket.userId!;
   console.log(`[Socket] Web client connected: ${userId}`);
 
-  // Save script and deploy to device
+  // Save script and deploy to all devices of the user
   socket.on('script:save', async (payload) => {
     const script = await scriptService.findById(payload.scriptId, userId);
     if (!script) return;
     await scriptService.update(payload.scriptId, userId, { code: payload.code });
-    if (script.deviceId) {
-      io.to(`device:${script.deviceId}`).emit('script:deploy', {
+    const devices = await deviceService.findByOwner(userId);
+    for (const device of devices) {
+      io.to(`device:${device._id.toString()}`).emit('script:deploy', {
         scriptId: script._id.toString(),
         code: payload.code,
         name: script.name,
@@ -136,24 +137,30 @@ function handleWebConnection(io: Server, socket: AuthenticatedSocket) {
     }
   });
 
-  // Compile script on device
+  // Compile script on all devices of the user
   socket.on('script:compile', async (payload) => {
     const script = await scriptService.findById(payload.scriptId, userId);
-    if (!script?.deviceId) return;
-    io.to(`device:${script.deviceId}`).emit('script:compile', {
-      scriptId: script._id.toString(),
-      code: script.code,
-    });
+    if (!script) return;
+    const devices = await deviceService.findByOwner(userId);
+    for (const device of devices) {
+      io.to(`device:${device._id.toString()}`).emit('script:compile', {
+        scriptId: script._id.toString(),
+        code: script.code,
+      });
+    }
   });
 
-  // Toggle script
+  // Toggle script on all devices of the user
   socket.on('script:toggle', async (payload) => {
     const script = await scriptService.update(payload.scriptId, userId, { enabled: payload.enabled });
-    if (!script?.deviceId) return;
-    io.to(`device:${script.deviceId}`).emit('script:toggle', {
-      scriptId: script._id.toString(),
-      enabled: payload.enabled,
-    });
+    if (!script) return;
+    const devices = await deviceService.findByOwner(userId);
+    for (const device of devices) {
+      io.to(`device:${device._id.toString()}`).emit('script:toggle', {
+        scriptId: script._id.toString(),
+        enabled: payload.enabled,
+      });
+    }
   });
 
   // Phone command
