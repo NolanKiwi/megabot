@@ -63,6 +63,7 @@ class ScriptEngineManager(
 
     /** Called by NotificationListener when a message arrives */
     fun onMessage(message: ChatMessage) {
+        Log.d(TAG, "onMessage: '${message.content}' from ${message.sender} in ${message.room}, compiledScripts=${compiledScripts.size}")
         compiledScripts.values.forEach { compiled ->
             if (!compiled.entity.enabled) return@forEach
 

@@ -75,7 +75,13 @@ class NotificationListener : NotificationListenerService() {
             Log.d(TAG, "[${parsed.packageName}] ${parsed.room} / ${parsed.sender}: ${parsed.content}")
 
             // Dispatch to script engine
-            ScriptEngineManager.instance?.onMessage(parsed)
+            val engine = ScriptEngineManager.instance
+            if (engine == null) {
+                Log.w(TAG, "ScriptEngineManager is null — Bot Service가 실행 중이 아닙니다")
+            } else {
+                Log.d(TAG, "ScriptEngineManager.onMessage 호출")
+                engine.onMessage(parsed)
+            }
 
         } catch (e: Exception) {
             Log.e(TAG, "Error processing notification", e)
