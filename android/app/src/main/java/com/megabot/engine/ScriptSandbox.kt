@@ -16,6 +16,7 @@ object ScriptSandbox {
         // MegaBot APIs
         "com.megabot.engine.api.BotApi",
         "com.megabot.engine.api.BotApi\$Replier",
+        "com.megabot.engine.ScriptEngine\$TestReplier",
         "com.megabot.engine.api.HttpApi",
         "com.megabot.engine.api.HttpApi\$HttpResponse",
         "com.megabot.engine.api.FileApi",
