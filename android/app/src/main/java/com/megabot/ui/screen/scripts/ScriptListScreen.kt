@@ -67,6 +67,7 @@ fun ScriptListScreen(viewModel: ScriptViewModel = hiltViewModel()) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScriptCard(
     script: ScriptEntity,

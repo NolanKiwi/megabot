@@ -135,10 +135,6 @@ class NotificationListener : NotificationListenerService() {
     private fun cacheReplyAction(packageName: String, room: String, notification: Notification) {
         val actions = notification.actions ?: return
         for (action in actions) {
-            val remoteInputs = RemoteInput.getRemoteInputsFromBundleArray(
-                action.extras.getParcelableArray("android.remoteinput.results")
-            )
-            // Alternative: use action.remoteInputs
             val inputs = action.remoteInputs ?: continue
             if (inputs.isNotEmpty()) {
                 replyActions["$packageName:$room"] = ReplyActionCache(

@@ -80,7 +80,9 @@ class CloudSyncService : Service() {
                     val scriptId = data.getString("scriptId")
                     val code = data.getString("code")
                     Log.i(TAG, "Script deployed: $scriptId")
-                    ScriptEngineManager.instance?.updateScript(scriptId, code)
+                    serviceScope.launch {
+                        ScriptEngineManager.instance?.updateScript(scriptId, code)
+                    }
                 } catch (e: Exception) {
                     Log.e(TAG, "Error handling script:deploy", e)
                 }

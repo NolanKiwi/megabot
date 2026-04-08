@@ -31,9 +31,9 @@ fun NavGraph() {
 
     val screens = listOf(
         Screen.Home to Icons.Default.Home,
-        Screen.Scripts to Icons.Default.Code,
+        Screen.Scripts to Icons.Default.Edit,
         Screen.Logs to Icons.Default.List,
-        Screen.Permissions to Icons.Default.Security,
+        Screen.Permissions to Icons.Default.Lock,
         Screen.Settings to Icons.Default.Settings
     )
 

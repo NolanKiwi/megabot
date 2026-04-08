@@ -160,7 +160,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
         }
 
         Spacer(modifier = Modifier.height(32.dp))
-        HorizontalDivider()
+        Divider()
         Spacer(modifier = Modifier.height(16.dp))
 
         Text("App Info", style = MaterialTheme.typography.titleMedium)

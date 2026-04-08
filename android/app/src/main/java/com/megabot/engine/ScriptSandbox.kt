@@ -56,14 +56,14 @@ object ScriptSandbox {
 
     fun createSandboxedScope(ctx: Context): ScriptableObject {
         // Set ClassShutter to restrict Java class access
-        ctx.classShutter = ClassShutter { className ->
+        ctx.setClassShutter(ClassShutter { className ->
             // Block dangerous prefixes first
             if (BLOCKED_PREFIXES.any { className.startsWith(it) }) {
                 return@ClassShutter false
             }
             // Allow whitelisted classes
             className in ALLOWED_CLASSES
-        }
+        })
 
         // Create standard scope with safety
         val scope = ctx.initSafeStandardObjects()
