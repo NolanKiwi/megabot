@@ -25,10 +25,10 @@ const deviceSchema = new Schema<IDevice>(
   {
     ownerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true },
-    androidId: { type: String, required: true },
-    model: { type: String, required: true },
-    osVersion: { type: String, required: true },
-    appVersion: { type: String, required: true },
+    androidId: { type: String, default: '' },   // 페어링 전 빈 문자열 허용
+    model: { type: String, default: '' },        // 페어링 후 채워짐
+    osVersion: { type: String, default: '' },
+    appVersion: { type: String, default: '' },
     status: { type: String, enum: ['online', 'offline', 'error'], default: 'offline' },
     lastSeenAt: { type: Date, default: Date.now },
     pairingCode: { type: String, default: null },
