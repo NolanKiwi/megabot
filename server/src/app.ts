@@ -17,7 +17,7 @@ app.use(cors({ origin: env.corsOrigin, credentials: true }));
 app.use(express.json({ limit: '1mb' }));
 
 // Rate limiting
-const authLimiter = rateLimit({ windowMs: 60_000, max: 5, message: { error: 'Too many requests' } });
+const authLimiter = rateLimit({ windowMs: 60_000, max: 30, message: { error: 'Too many requests' } });
 const apiLimiter = rateLimit({ windowMs: 60_000, max: 100, message: { error: 'Too many requests' } });
 
 // Routes
