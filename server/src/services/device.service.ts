@@ -34,7 +34,8 @@ export class DeviceService {
 
     device.androidId = androidId;
     device.name = name;
-    device.model = model;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (device as any).model = model; // 'model' conflicts with Mongoose Document.model() type
     device.osVersion = osVersion;
     device.appVersion = appVersion;
     device.pairingCode = null;
