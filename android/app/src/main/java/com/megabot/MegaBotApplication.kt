@@ -26,7 +26,7 @@ class MegaBotApplication : Application() {
             "Bot Service",
             NotificationManager.IMPORTANCE_LOW
         ).apply {
-            description = "MegaBot background service notification"
+            description = "_nolanbot background service notification"
         }
 
         val logChannel = NotificationChannel(

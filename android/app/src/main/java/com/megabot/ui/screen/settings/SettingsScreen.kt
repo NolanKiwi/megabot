@@ -165,7 +165,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
 
         Text("App Info", style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(8.dp))
-        Text("MegaBot v1.0.0", style = MaterialTheme.typography.bodyMedium)
+        Text("_nolanbot v1.0.0", style = MaterialTheme.typography.bodyMedium)
         Text(
             "Messenger Bot Platform with Phone/SMS & Cloud Dashboard",
             style = MaterialTheme.typography.bodySmall,

@@ -16,7 +16,7 @@ class BotForegroundService : Service() {
     override fun onCreate() {
         super.onCreate()
         val notification = NotificationCompat.Builder(this, MegaBotApplication.CHANNEL_BOT_SERVICE)
-            .setContentTitle("MegaBot")
+            .setContentTitle("_nolanbot")
             .setContentText("Bot is running")
             .setSmallIcon(R.drawable.ic_bot)
             .setOngoing(true)

@@ -19,7 +19,7 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             .padding(16.dp)
     ) {
         Text(
-            text = "MegaBot",
+            text = "_nolanbot",
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold
         )

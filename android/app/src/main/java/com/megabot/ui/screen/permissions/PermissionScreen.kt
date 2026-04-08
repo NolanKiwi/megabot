@@ -41,7 +41,7 @@ fun PermissionScreen() {
         Text("Permissions", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            "MegaBot needs these permissions to function properly.",
+            "_nolanbot needs these permissions to function properly.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )

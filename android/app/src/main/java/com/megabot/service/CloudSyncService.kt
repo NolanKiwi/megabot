@@ -39,7 +39,7 @@ class CloudSyncService : Service() {
         instance = this
 
         val notification = NotificationCompat.Builder(this, MegaBotApplication.CHANNEL_BOT_SERVICE)
-            .setContentTitle("MegaBot Cloud")
+            .setContentTitle("_nolanbot Cloud")
             .setContentText("Connected to cloud server")
             .setSmallIcon(R.drawable.ic_bot)
             .setOngoing(true)
