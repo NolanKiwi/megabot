@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export interface IDevice extends Document {
+export interface IDevice extends Omit<Document, 'model'> {
   ownerId: mongoose.Types.ObjectId;
   name: string;
   androidId: string;
@@ -44,7 +44,8 @@ const deviceSchema = new Schema<IDevice>(
 );
 
 deviceSchema.set('toJSON', {
-  transform: (_doc, ret) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  transform: (_doc, ret: any) => {
     ret.id = ret._id.toString();
     delete ret._id;
     delete ret.__v;

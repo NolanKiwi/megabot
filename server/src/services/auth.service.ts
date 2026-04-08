@@ -43,12 +43,12 @@ export class AuthService {
 
   private generateAccessToken(user: IUser): string {
     const payload: AuthPayload = { userId: user._id.toString(), role: user.role };
-    return jwt.sign(payload, env.jwt.accessSecret, { expiresIn: env.jwt.accessExpiresIn });
+    return jwt.sign(payload, env.jwt.accessSecret, { expiresIn: env.jwt.accessExpiresIn as jwt.SignOptions['expiresIn'] });
   }
 
   private generateRefreshToken(user: IUser): string {
     const payload: AuthPayload = { userId: user._id.toString(), role: user.role };
-    return jwt.sign(payload, env.jwt.refreshSecret, { expiresIn: env.jwt.refreshExpiresIn });
+    return jwt.sign(payload, env.jwt.refreshSecret, { expiresIn: env.jwt.refreshExpiresIn as jwt.SignOptions['expiresIn'] });
   }
 }
 

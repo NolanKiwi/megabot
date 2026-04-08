@@ -48,7 +48,7 @@ export class DeviceService {
     const token = jwt.sign(
       { userId: device.ownerId.toString(), role: 'user' },
       env.jwt.accessSecret,
-      { expiresIn: '365d' }
+      { expiresIn: '365d' as jwt.SignOptions['expiresIn'] }
     );
 
     return { deviceId: device._id.toString(), token };
