@@ -13,7 +13,7 @@ interface ScriptState {
   deleteScript: (id: string) => Promise<void>;
 }
 
-export const useScriptStore = create<ScriptState>()((set, get) => ({
+export const useScriptStore = create<ScriptState>()((set) => ({
   scripts: [],
   selectedScript: null,
   loading: false,

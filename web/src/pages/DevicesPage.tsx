@@ -77,14 +77,11 @@ export default function DevicesPage() {
                     {device.permissions.notificationAccess && (
                       <span className="px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded">Notifications</span>
                     )}
-                    {device.permissions.sms && (
+                    {device.permissions.sendSms && (
                       <span className="px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded">SMS</span>
                     )}
-                    {device.permissions.phone && (
+                    {device.permissions.callPhone && (
                       <span className="px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded">Phone</span>
-                    )}
-                    {device.permissions.storage && (
-                      <span className="px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded">Storage</span>
                     )}
                   </div>
                 )}
