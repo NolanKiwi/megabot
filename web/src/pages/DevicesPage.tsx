@@ -5,14 +5,25 @@ import { generatePairingCode } from '../api/devices';
 export default function DevicesPage() {
   const { devices, loading, fetchDevices, deleteDevice } = useDeviceStore();
   const [pairingCode, setPairingCode] = useState<string | null>(null);
+  const [codeLoading, setCodeLoading] = useState(false);
+  const [codeError, setCodeError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchDevices();
   }, [fetchDevices]);
 
   const handleGenerateCode = async () => {
-    const code = await generatePairingCode();
-    setPairingCode(code);
+    setCodeLoading(true);
+    setCodeError(null);
+    try {
+      const code = await generatePairingCode();
+      setPairingCode(code);
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : '알 수 없는 오류';
+      setCodeError(`페어링 코드 발급 실패: ${msg}`);
+    } finally {
+      setCodeLoading(false);
+    }
   };
 
   return (
@@ -21,11 +32,18 @@ export default function DevicesPage() {
         <h1 className="text-2xl font-bold text-white">Devices</h1>
         <button
           onClick={handleGenerateCode}
-          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg"
+          disabled={codeLoading}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm rounded-lg"
         >
-          + Pair New Device
+          {codeLoading ? '발급 중...' : '+ Pair New Device'}
         </button>
       </div>
+
+      {codeError && (
+        <div className="mb-4 p-3 bg-red-500/20 border border-red-500/40 rounded-lg text-red-400 text-sm">
+          {codeError}
+        </div>
+      )}
 
       {pairingCode && (
         <div className="mb-6 bg-blue-500/10 border border-blue-500/30 rounded-xl p-5 text-center">
