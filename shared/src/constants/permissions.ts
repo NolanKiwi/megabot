@@ -1,0 +1,19 @@
+export const ANDROID_PERMISSIONS = {
+  NOTIFICATION_LISTENER: 'android.permission.BIND_NOTIFICATION_LISTENER_SERVICE',
+  CALL_PHONE: 'android.permission.CALL_PHONE',
+  SEND_SMS: 'android.permission.SEND_SMS',
+  READ_SMS: 'android.permission.READ_SMS',
+  READ_PHONE_STATE: 'android.permission.READ_PHONE_STATE',
+  INTERNET: 'android.permission.INTERNET',
+  FOREGROUND_SERVICE: 'android.permission.FOREGROUND_SERVICE',
+  READ_EXTERNAL_STORAGE: 'android.permission.READ_EXTERNAL_STORAGE',
+  WRITE_EXTERNAL_STORAGE: 'android.permission.WRITE_EXTERNAL_STORAGE',
+} as const;
+
+export const RATE_LIMITS = {
+  PHONE_CALLS_PER_HOUR: 10,
+  SMS_PER_HOUR: 50,
+  HTTP_REQUESTS_PER_MINUTE: 60,
+  AUTH_ATTEMPTS_PER_MINUTE: 5,
+  API_REQUESTS_PER_MINUTE: 100,
+} as const;
