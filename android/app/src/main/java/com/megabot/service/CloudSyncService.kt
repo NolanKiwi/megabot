@@ -10,6 +10,11 @@ import com.megabot.R
 import com.megabot.engine.ScriptEngineManager
 import io.socket.client.IO
 import io.socket.client.Socket
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 /**
@@ -27,6 +32,7 @@ class CloudSyncService : Service() {
     }
 
     private var socket: Socket? = null
+    private val serviceScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     override fun onCreate() {
         super.onCreate()
@@ -69,41 +75,57 @@ class CloudSyncService : Service() {
 
             // Receive script deployment
             socket?.on("script:deploy") { args ->
-                val data = args[0] as JSONObject
-                val scriptId = data.getString("scriptId")
-                val code = data.getString("code")
-                Log.i(TAG, "Script deployed: $scriptId")
-                ScriptEngineManager.instance?.updateScript(scriptId, code)
+                try {
+                    val data = args[0] as JSONObject
+                    val scriptId = data.getString("scriptId")
+                    val code = data.getString("code")
+                    Log.i(TAG, "Script deployed: $scriptId")
+                    ScriptEngineManager.instance?.updateScript(scriptId, code)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error handling script:deploy", e)
+                }
             }
 
             // Receive script toggle
             socket?.on("script:toggle") { args ->
-                val data = args[0] as JSONObject
-                val scriptId = data.getString("scriptId")
-                val enabled = data.getBoolean("enabled")
-                kotlinx.coroutines.runBlocking {
-                    ScriptEngineManager.instance?.toggleScript(scriptId, enabled)
+                try {
+                    val data = args[0] as JSONObject
+                    val scriptId = data.getString("scriptId")
+                    val enabled = data.getBoolean("enabled")
+                    serviceScope.launch {
+                        ScriptEngineManager.instance?.toggleScript(scriptId, enabled)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error handling script:toggle", e)
                 }
             }
 
             // Receive phone command from web dashboard
             socket?.on("command:phone") { args ->
-                val data = args[0] as JSONObject
-                val action = data.getString("action")
-                val number = data.getString("number")
-                if (action == "call") {
-                    com.megabot.engine.api.PhoneApi(this).call(number)
+                try {
+                    val data = args[0] as JSONObject
+                    val action = data.getString("action")
+                    val number = data.getString("number")
+                    if (action == "call") {
+                        com.megabot.engine.api.PhoneApi(this).call(number)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error handling command:phone", e)
                 }
             }
 
             // Receive SMS command from web dashboard
             socket?.on("command:sms") { args ->
-                val data = args[0] as JSONObject
-                val message = data.getString("message")
-                val numbers = data.getJSONArray("numbers")
-                val smsApi = com.megabot.engine.api.SmsApi(this)
-                for (i in 0 until numbers.length()) {
-                    smsApi.send(numbers.getString(i), message)
+                try {
+                    val data = args[0] as JSONObject
+                    val message = data.getString("message")
+                    val numbers = data.getJSONArray("numbers")
+                    val smsApi = com.megabot.engine.api.SmsApi(this)
+                    for (i in 0 until numbers.length()) {
+                        smsApi.send(numbers.getString(i), message)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error handling command:sms", e)
                 }
             }
 
@@ -124,6 +146,7 @@ class CloudSyncService : Service() {
     }
 
     override fun onDestroy() {
+        serviceScope.cancel()
         disconnect()
         instance = null
         super.onDestroy()
