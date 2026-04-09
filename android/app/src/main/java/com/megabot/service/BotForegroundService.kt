@@ -57,9 +57,20 @@ class BotForegroundService : Service() {
         return START_STICKY
     }
 
+    // 앱을 스와이프로 종료해도 서비스 재시작
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        Log.i(TAG, "Task removed, restarting service")
+        val restartIntent = Intent(applicationContext, BotForegroundService::class.java)
+        startForegroundService(restartIntent)
+    }
+
     override fun onDestroy() {
         ScriptEngineManager.instance?.destroy()
         scope.cancel()
+        // 서비스가 죽으면 자동 재시작
+        val restartIntent = Intent(applicationContext, BotForegroundService::class.java)
+        startForegroundService(restartIntent)
         super.onDestroy()
     }
 
