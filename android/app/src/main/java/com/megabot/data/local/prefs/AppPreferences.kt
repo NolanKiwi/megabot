@@ -26,6 +26,10 @@ class AppPreferences @Inject constructor(
     val isConnected: Boolean
         get() = deviceId.isNotEmpty() && deviceToken.isNotEmpty() && serverUrl.isNotEmpty()
 
+    var botServiceEnabled: Boolean
+        get() = prefs.getBoolean("bot_service_enabled", false)
+        set(value) = prefs.edit().putBoolean("bot_service_enabled", value).apply()
+
     fun clear() {
         prefs.edit().clear().apply()
     }

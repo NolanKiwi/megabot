@@ -36,6 +36,13 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
+        // Bot Service 자동 복구 (이전에 켜놨으면 재시작)
+        if (prefs.botServiceEnabled) {
+            val intent = Intent(application, BotForegroundService::class.java)
+            application.startForegroundService(intent)
+            _uiState.update { it.copy(serviceRunning = true) }
+        }
+
         // 저장된 자격증명으로 클라우드 자동 연결
         if (prefs.isConnected) {
             val intent = Intent(application, CloudSyncService::class.java)
@@ -74,7 +81,6 @@ class HomeViewModel @Inject constructor(
         val intent = Intent(application, BotForegroundService::class.java)
         if (running) {
             application.startForegroundService(intent)
-            // 봇 서비스와 함께 클라우드도 연결
             if (prefs.isConnected) {
                 val cloudIntent = Intent(application, CloudSyncService::class.java)
                 application.startForegroundService(cloudIntent)
@@ -86,6 +92,7 @@ class HomeViewModel @Inject constructor(
         } else {
             application.stopService(intent)
         }
+        prefs.botServiceEnabled = running  // 상태 저장
         _uiState.update { it.copy(serviceRunning = running) }
     }
 }
