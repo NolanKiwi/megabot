@@ -65,14 +65,15 @@ class PhoneApi(private val context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notification = NotificationCompat.Builder(context, MegaBotApplication.CHANNEL_BOT_SERVICE)
-            .setContentTitle("전화 걸기")
+        val notification = NotificationCompat.Builder(context, MegaBotApplication.CHANNEL_CALLS)
+            .setContentTitle("📞 전화 걸기")
             .setContentText(number)
             .setSmallIcon(R.drawable.ic_bot)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_CALL)
             .setFullScreenIntent(pendingIntent, true)
             .setAutoCancel(true)
+            .setVibrate(longArrayOf(0, 500, 200, 500))
             .build()
 
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
